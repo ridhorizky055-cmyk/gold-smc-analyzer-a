@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gold SMC Analyzer AI</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#10141e;color:#f1f5f9;
+  font-family:Arial,sans-serif;padding:16px
+}
+header{text-align:center;padding:20px 0}
+h1{color:#f5c542;font-size:24px}
+.sub{color:#aab4c5;font-size:13px}
+.card{
+  background:#1b2230;border:1px solid #30394a;
+  border-radius:14px;padding:16px;margin:14px 0
+}
+h2{font-size:17px;margin-top:0}
+label{display:block;margin:12px 0 6px;color:#cbd5e1}
+input,textarea{
+  width:100%;padding:12px;border-radius:9px;
+  border:1px solid #475569;background:#10141e;
+  color:white;font-size:16px
+}
+textarea{min-height:90px;resize:vertical}
+button{
+  background:#eabf35;color:#171717;border:0;
+  padding:12px 16px;border-radius:9px;
+  font-weight:bold;width:100%;margin-top:12px
+}
+.check{display:flex;gap:10px;margin:13px 0;color:#e2e8f0}
+.check input{width:auto}
+.result{
+  background:#10141e;padding:12px;border-radius:9px;
+  margin-top:12px;line-height:1.6
+}
+.small{font-size:12px;color:#aab4c5;line-height:1.6}
+.entry{
+  border-top:1px solid #394355;padding:12px 0;
+  line-height:1.6;overflow-wrap:anywhere
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>GOLD SMC ANALYZER</h1>
+  <div class="sub">XAUUSD • SMC Learning & Paper Journal</div>
+</header>
+
+<div class="card">
+  <h2>01 / Market Observation</h2>
+  <p class="small">Masukkan data secara manual dari chart untuk latihan.</p>
+  <label>Harga XAUUSD</label>
+  <input id="price" type="number" step="0.01"
+    placeholder="Contoh: 2650.50">
+  <label>Timeframe</label>
+  <select id="tf" style="width:100%;padding:12px;background:#10141e;color:white;border-radius:9px">
+    <option>M5</option><option>M15</option>
+    <option>H1</option><option>H4</option><option>D1</option>
+  </select>
+  <label>Catatan arah struktur</label>
+  <select id="structure" style="width:100%;padding:12px;background:#10141e;color:white;border-radius:9px">
+    <option>Belum diketahui</option>
+    <option>Higher High / Higher Low</option>
+    <option>Lower High / Lower Low</option>
+    <option>Sideways</option>
+  </select>
+</div>
+
+<div class="card">
+  <h2>02 / Checklist SMC</h2>
+  <p class="small">Tandai jika kamu sudah mengamati unsur tersebut di chart.</p>
+  <label class="check"><input type="checkbox"> BOS teridentifikasi</label>
+  <label class="check"><input type="checkbox"> CHoCH teridentifikasi</label>
+  <label class="check"><input type="checkbox"> Area liquidity diamati</label>
+  <label class="check"><input type="checkbox"> Order block diamati</label>
+  <label class="check"><input type="checkbox"> Fair Value Gap diamati</label>
+  <label class="check"><input type="checkbox"> Premium / Discount diamati</label>
+  <button onclick="checkSMC()">Periksa checklist</button>
+  <div id="checkResult" class="result">Checklist belum diperiksa.</div>
+</div>
+
+<div class="card">
+  <h2>03 / Jurnal Simulasi</h2>
+  <p class="small">Catat skenario latihan, bukan instruksi transaksi.</p>
+  <label>Ide atau skenario pengamatan</label>
+  <textarea id="idea" placeholder="Contoh: Mengamati kemungkinan perubahan struktur setelah harga menyentuh area liquidity..."></textarea>
+  <label>Alasan berdasarkan chart</label>
+  <textarea id="reason" placeholder="Tuliskan alasan dan hal yang masih belum pasti..."></textarea>
+  <label>Hasil pengamatan</label>
+  <select id="outcome" style="width:100%;padding:12px;background:#10141e;color:white;border-radius:9px">
+    <option>Belum dievaluasi</option>
+    <option>Sesuai skenario</option>
+    <option>Tidak sesuai skenario</option>
+    <option>Belum ada konfirmasi</option>
+  </select>
+  <button onclick="saveNote()">Simpan catatan</button>
+</div>
+
+<div class="card">
+  <h2>04 / Riwayat Catatan</h2>
+  <div id="history" class="small">Belum ada catatan tersimpan.</div>
+  <button onclick="clearNotes()" style="background:#475569;color:white">
+    Hapus semua catatan
+  </button>
+</div>
+
+<p class="small">
+  Catatan: Versi ini adalah alat belajar manual. Tidak terhubung
+  ke harga real-time, tidak menghasilkan prediksi, dan tidak
+  melakukan transaksi uang sungguhan. Data catatan tersimpan
+  di browser perangkat ini.
+</p>
+
+<script>
+function checkSMC(){
+  const checks=[...document.querySelectorAll(
+    '.check input'
+  )];
+  const count=checks.filter(c=>c.checked).length;
+  document.getElementById('checkResult').textContent=
+    count+' dari '+checks.length+
+    ' unsur sudah kamu amati. Checklist bukan bukti bahwa skenario akan terjadi.';
+}
+
+function getNotes(){
+  try{return JSON.parse(localStorage.getItem('goldNotes')||'[]')}
+  catch(e){return []}
+}
+
+function saveNote(){
+  const price=document.getElementById('price').value;
+  const idea=document.getElementById('idea').value.trim();
+  const reason=document.getElementById('reason').value.trim();
+  if(!price || !idea){
+    alert('Isi harga dan ide pengamatan terlebih dahulu.');
+    return;
+  }
+  const note={
+    date:new Date().toLocaleString('id-ID'),
+    price:price,
+    tf:document.getElementById('tf').value,
+    structure:document.getElementById('structure').value,
+    idea:idea,reason:reason,
+    outcome:document.getElementById('outcome').value
+  };
+  const notes=getNotes();
+  notes.unshift(note);
+  localStorage.setItem('goldNotes',JSON.stringify(notes));
+  document.getElementById('idea').value='';
+  document.getElementById('reason').value='';
+  showNotes();
+  alert('Catatan simulasi tersimpan.');
+}
+
+function showNotes(){
+  const notes=getNotes();
+  const history=document.getElementById('history');
+  if(!notes.length){
+    history.textContent='Belum ada catatan tersimpan.';
+    return;
+  }
+  history.innerHTML=notes.map(n=>
+    '<div class="entry">'+
+    '<b>'+n.date+'</b><br>'+
+    'Harga: '+escapeHTML(n.price)+' | '+escapeHTML(n.tf)+'<br>'+
+    'Struktur: '+escapeHTML(n.structure)+'<br>'+
+    'Skenario: '+escapeHTML(n.idea)+'<br>'+
+    'Alasan: '+escapeHTML(n.reason||'-')+'<br>'+
+    'Evaluasi: '+escapeHTML(n.outcome)+
+    '</div>'
+  ).join('');
+}
+
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;',
+    '"':'&quot;',"'":'&#39;'
+  })[c]);
+}
+
+function clearNotes(){
+  if(confirm('Hapus semua catatan simulasi?')){
+    localStorage.removeItem('goldNotes');
+    showNotes();
+  }
+}
+showNotes();
+</script>
+</body>
+  </html>
+  
