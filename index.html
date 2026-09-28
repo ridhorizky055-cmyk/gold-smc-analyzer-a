@@ -190,6 +190,36 @@ function clearNotes(){
 }
 showNotes();
 </script>
+<div style="margin:20px;padding:15px;background:#1e293b;border-radius:12px;color:white;">
+  <h2>📸 Upload Screenshot MT5</h2>
+  <p>Pilih screenshot chart dari HP kamu.</p>
+
+  <input
+    type="file"
+    id="mt5Image"
+    accept="image/*"
+    onchange="previewMT5(event)"
+  >
+
+  <br><br>
+
+  <img
+    id="preview"
+    style="display:none;width:100%;border-radius:10px;"
+    alt="Preview screenshot MT5"
+  >
+</div>
+
+<script>
+function previewMT5(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const preview = document.getElementById("preview");
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+}
+</script>
 </body>
   </html>
   
