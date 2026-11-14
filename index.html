@@ -164,48 +164,73 @@ document.getElementById("uploadStatus").textContent=
 selected.length+" timeframe terupload: "+selected.join(", ");
 }
 
-function prepareAnalysis(){
-const pair=document.getElementById("pair").value.trim();
-const missing=slots.filter(s=>
-!document.getElementById(s[0]).files.length
-).map(s=>s[2]);
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbw0VKDsy-Ozl4AcKENkPXsagvtTXrnLkBZvt1ZivCmt0HRK10fx6Agagu--ptNT5nMAFQ/exec";
 
-if(!pair){alert("Masukkan pair.");return;}
-if(missing.length){
-alert("Upload screenshot: "+missing.join(", "));
-return;
-}
+async function prepareAnalysis(){
+  const pair = document.getElementById("pair").value.trim();
+  const session = document.getElementById("session").value;
 
-const prompt=`Analisis tiga screenshot MT5 untuk pair ${pair}.
+  const missing = slots.filter(s =>
+    !document.getElementById(s[0]).files.length
+  ).map(s => s[2]);
 
-Sesi pasar: ${document.getElementById("session").value}.
+  if(!pair){
+    alert("Masukkan pair.");
+    return;
+  }
 
-Gunakan H1 untuk bias utama, M15 untuk konfirmasi, dan M5 untuk pengamatan struktur lebih detail.
+  if(missing.length){
+    alert("Upload screenshot: " + missing.join(", "));
+    return;
+  }
 
-Periksa:
-1. Market Structure HH, HL, LH, LL.
-2. BOS dan CHoCH.
-3. Liquidity Pool dan Liquidity Sweep.
-4. Bullish dan Bearish Order Block.
-5. Fair Value Gap.
-6. Premium dan Discount.
-7. Keselarasan antar timeframe.
+  const prompt = `Pengamatan edukasi SMC untuk ${pair}.
+Sesi: ${session}.
+Timeframe: H1, M15, M5.
+Periksa struktur pasar, BOS, CHoCH, liquidity,
+Order Block, Fair Value Gap, Premium dan Discount.
+Jangan mengarang data yang tidak terlihat.
+`;
 
-Berikan laporan:
-- Bias pasar.
-- Struktur setiap timeframe.
-- Zona penting yang terlihat.
-- Skenario bullish dan bearish.
-- Kondisi yang membatalkan masing-masing skenario.
-- Kesimpulan WAIT jika bukti belum cukup.
+  document.getElementById("prompt").value = prompt;
 
-Jangan mengarang angka harga yang tidak terbaca. Bedakan pengamatan dan interpretasi. Jangan menjanjikan keuntungan atau kepastian. Ini analisis edukasi dan paper trading.`;
+  const status = document.getElementById("analysisStatus");
+  const result = document.getElementById("result");
 
-document.getElementById("prompt").value=prompt;
-document.getElementById("analysisStatus").textContent=
-"Instruksi siap. Lampirkan ketiga screenshot ketika mengirim prompt ke ChatGPT.";
-document.getElementById("result").textContent=
-"Screenshot siap diperiksa. Analisis visual otomatis belum terhubung.";
+  status.textContent = "Menghubungkan ke backend...";
+  result.textContent = "Menunggu respons backend...";
+
+  const payload = {
+    pair: pair,
+    session: session,
+    timeframes: ["H1", "M15", "M5"],
+    mode: "paper_analysis"
+  };
+
+  try {
+    const response = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    status.textContent = "Backend berhasil merespons.";
+
+    result.textContent =
+      "Status: " + (data.analysis_status || "Diterima") +
+      "\nAI: " + (data.ai_status || "Belum dikonfigurasi") +
+      "\n\nBackend sudah menerima data pengujian. " +
+      "Analisis visual AI belum aktif.";
+  } catch(error) {
+    status.textContent = "Koneksi belum berhasil.";
+    result.textContent =
+      "Periksa URL backend dan izin akses Web App. " +
+      "Jika muncul kesalahan CORS, koneksi browser perlu penyesuaian.";
+  }
 }
 
 async function copyPrompt(){
