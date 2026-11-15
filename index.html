@@ -122,13 +122,33 @@ Belum ada analisis. Siapkan screenshot dan gunakan instruksi analisis bersama ga
 <p class="small">Versi ini belum terhubung ke mesin AI visual. Hasil analisis otomatis memerlukan integrasi API dan backend.</p>
 </div>
 
+
+
 <div class="card">
 <h2>06 / RIWAYAT PENGAMATAN</h2>
-<textarea id="notes" placeholder="Catatan pengamatan SMC..."></textarea>
-<button onclick="saveNotes()">SIMPAN CATATAN</button>
-<div id="saved" class="small"></div>
+
+<p class="small">
+Simpan hasil pengamatan struktur pasar untuk pembelajaran SMC.
+</p>
+
+<label>Catatan pengamatan</label>
+<textarea id="notes"
+placeholder="Contoh: H1 menunjukkan struktur bullish, M15 belum mengonfirmasi..."></textarea>
+
+<button onclick="saveNotes()">SIMPAN PENGAMATAN</button>
+
+<div id="saved" class="status"></div>
+
+<h2 style="margin-top:20px">RIWAYAT SEBELUMNYA</h2>
+<div id="historyList" class="result">
+Belum ada riwayat pengamatan.
 </div>
 
+<button class="secondary" onclick="clearHistory()">
+HAPUS SEMUA RIWAYAT
+</button>
+</div>
+  
 <p class="small">
 GOLD SMC AI ANALYZER V2.0<br>
 Alat pembelajaran dan paper analysis. Tidak terhubung ke broker dan tidak melakukan eksekusi transaksi.
