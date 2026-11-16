@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,30 +6,74 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1220">
 <title>GOLD SMC AI ANALYZER</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0b1220;color:#eef3fb;font-family:Arial,sans-serif;padding:15px}
+body{
+ margin:0;background:#0b1220;color:#eef3fb;
+ font-family:Arial,sans-serif;padding:15px
+}
 header{text-align:center;padding:22px 0}
 h1{color:#e9bd55;font-size:25px}
-.sub{color:#91a1b8;font-size:12px}
-.card{background:#152136;border:1px solid #293b55;border-radius:15px;padding:16px;margin:14px 0}
 h2{font-size:17px;margin:0 0 13px}
-label{display:block;color:#bdcbe0;font-size:13px;margin:12px 0 7px}
-input,select,textarea{width:100%;padding:12px;background:#0b1423;color:white;border:1px solid #354963;border-radius:9px;font-size:14px}
-textarea{min-height:130px}
-button{width:100%;padding:14px;border:0;border-radius:9px;background:#e9bd55;color:#171717;font-weight:bold;margin-top:12px}
+.sub{color:#91a1b8;font-size:12px}
+.card{
+ background:#152136;border:1px solid #293b55;
+ border-radius:15px;padding:16px;margin:14px 0
+}
+label{
+ display:block;color:#bdcbe0;font-size:13px;
+ margin:12px 0 7px
+}
+input,select,textarea{
+ width:100%;padding:12px;background:#0b1423;
+ color:white;border:1px solid #354963;
+ border-radius:9px;font-size:14px
+}
+textarea{min-height:130px;resize:vertical}
+button{
+ width:100%;padding:14px;border:0;border-radius:9px;
+ background:#e9bd55;color:#171717;font-weight:bold;
+ margin-top:12px;cursor:pointer
+}
 .secondary{background:#293b55;color:white}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.upload{background:#0b1423;padding:8px;border:1px dashed #62758e;border-radius:10px;min-width:0}
-.upload b{display:block;color:#e9bd55;font-size:13px;margin-bottom:8px}
+.danger{background:#713b45;color:white}
+.grid{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:8px
+}
+.upload{
+ background:#0b1423;padding:8px;
+ border:1px dashed #62758e;border-radius:10px;min-width:0
+}
+.upload b{
+ display:block;color:#e9bd55;font-size:13px;margin-bottom:8px
+}
 .upload input{font-size:10px;padding:6px}
-.preview{display:none;width:100%;margin-top:8px;border-radius:7px}
+.preview{
+ display:none;width:100%;margin-top:8px;border-radius:7px
+}
 .small{font-size:12px;color:#91a1b8;line-height:1.6}
-.result{background:#0b1423;padding:12px;border-radius:9px;margin-top:12px;line-height:1.6;overflow-wrap:anywhere}
+.result{
+ background:#0b1423;padding:12px;border-radius:9px;
+ margin-top:12px;line-height:1.6;overflow-wrap:anywhere;
+ white-space:pre-wrap
+}
 .status{color:#e9bd55;font-size:12px;margin-top:10px}
-@media(max-width:380px){.grid{gap:4px}.upload{padding:5px}}
+.history-item{
+ border-bottom:1px solid #354963;padding:12px 0;
+ font-size:13px;line-height:1.6
+}
+.history-item:last-child{border-bottom:0}
+.history-date{color:#e9bd55;font-size:11px}
+@media(max-width:380px){
+ body{padding:9px}
+ .grid{gap:4px}
+ .upload{padding:5px}
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -39,8 +84,10 @@ button{width:100%;padding:14px;border:0;border-radius:9px;background:#e9bd55;col
 
 <div class="card">
 <h2>01 / MARKET SELECTOR</h2>
+
 <label>Pilih Pair</label>
 <input id="pair" list="pairs" value="XAUUSD">
+
 <datalist id="pairs">
 <option>XAUUSD</option>
 <option>XAGUSD</option>
@@ -67,68 +114,90 @@ button{width:100%;padding:14px;border:0;border-radius:9px;background:#e9bd55;col
 
 <div class="card">
 <h2>02 / UPLOAD MT5 CHART</h2>
-<p class="small">Upload tiga screenshot dari pair yang sama.</p>
+<p class="small">Upload screenshot dari pair yang sama.</p>
 
 <div class="grid">
 <div class="upload">
 <b>H1</b>
 <input type="file" id="h1" accept="image/*">
-<img id="ph1" class="preview">
+<img id="ph1" class="preview" alt="Preview H1">
 </div>
 
 <div class="upload">
 <b>M15</b>
 <input type="file" id="m15" accept="image/*">
-<img id="pm15" class="preview">
+<img id="pm15" class="preview" alt="Preview M15">
 </div>
 
 <div class="upload">
 <b>M5</b>
 <input type="file" id="m5" accept="image/*">
-<img id="pm5" class="preview">
+<img id="pm5" class="preview" alt="Preview M5">
 </div>
 </div>
-<div id="uploadStatus" class="status">Menunggu screenshot.</div>
+
+<div id="uploadStatus" class="status">
+Menunggu screenshot.
+</div>
 </div>
 
 <div class="card">
 <h2>03 / SMC ANALYSIS</h2>
-<p class="small">Elemen yang akan diperiksa oleh AI:</p>
+<p class="small">Elemen pengamatan edukasi:</p>
+
 <div class="result">
-☑ Market Structure<br>
-☑ Break of Structure (BOS)<br>
-☑ Change of Character (CHoCH)<br>
-☑ Liquidity Sweep<br>
-☑ Order Block<br>
-☑ Fair Value Gap<br>
-☑ Premium & Discount<br>
+☑ Market Structure
+☑ Break of Structure (BOS)
+☑ Change of Character (CHoCH)
+☑ Liquidity Sweep
+☑ Order Block
+☑ Fair Value Gap
+☑ Premium & Discount
 ☑ Multi Timeframe Confirmation
 </div>
-<button onclick="prepareAnalysis()">SIAPKAN ANALISIS AI</button>
+
+<button id="analyzeButton" onclick="prepareAnalysis()">
+SIAPKAN ANALISIS
+</button>
+
 <div id="analysisStatus" class="status"></div>
 </div>
 
 <div class="card">
 <h2>04 / ANALYSIS INSTRUCTIONS</h2>
-<textarea id="prompt" placeholder="Instruksi analisis akan muncul di sini..." readonly></textarea>
-<button class="secondary" onclick="copyPrompt()">SALIN INSTRUKSI</button>
+
+<textarea id="prompt"
+placeholder="Instruksi analisis akan muncul di sini..."
+readonly></textarea>
+
+<button class="secondary" onclick="copyPrompt()">
+SALIN INSTRUKSI
+</button>
+
+<p class="small">
+Salin instruksi dan lampirkan tiga screenshot di percakapan
+ChatGPT untuk meminta pengamatan visual edukatif.
+</p>
 </div>
 
 <div class="card">
 <h2>05 / ANALYSIS RESULT</h2>
+
 <div class="result" id="result">
-Belum ada analisis. Siapkan screenshot dan gunakan instruksi analisis bersama gambar di ChatGPT.
-</div>
-<p class="small">Versi ini belum terhubung ke mesin AI visual. Hasil analisis otomatis memerlukan integrasi API dan backend.</p>
+Belum ada analisis.
 </div>
 
-
+<p class="small">
+Backend saat ini hanya menerima metadata pengujian.
+AI Vision otomatis belum dikonfigurasi.
+</p>
+</div>
 
 <div class="card">
 <h2>06 / RIWAYAT PENGAMATAN</h2>
 
 <p class="small">
-Simpan hasil pengamatan struktur pasar untuk pembelajaran SMC.
+Simpan catatan pembelajaran SMC di browser perangkat ini.
 </p>
 
 <label>Catatan pengamatan</label>
@@ -140,141 +209,334 @@ placeholder="Contoh: H1 menunjukkan struktur bullish, M15 belum mengonfirmasi...
 <div id="saved" class="status"></div>
 
 <h2 style="margin-top:20px">RIWAYAT SEBELUMNYA</h2>
+
 <div id="historyList" class="result">
 Belum ada riwayat pengamatan.
 </div>
 
-<button class="secondary" onclick="clearHistory()">
+<button class="secondary" onclick="showHistory()">
+SEGARKAN RIWAYAT
+</button>
+
+<button class="danger" onclick="clearHistory()">
 HAPUS SEMUA RIWAYAT
 </button>
 </div>
-  
+
 <p class="small">
-GOLD SMC AI ANALYZER V2.0<br>
-Alat pembelajaran dan paper analysis. Tidak terhubung ke broker dan tidak melakukan eksekusi transaksi.
+GOLD SMC AI ANALYZER V3.0<br>
+Alat pembelajaran dan paper analysis.
+Tidak terhubung ke broker dan tidak melakukan eksekusi transaksi.
 </p>
 
 <script>
 const slots=[
-["h1","ph1","H1"],
-["m15","pm15","M15"],
-["m5","pm5","M5"]
+ ["h1","ph1","H1"],
+ ["m15","pm15","M15"],
+ ["m5","pm5","M5"]
 ];
 
-slots.forEach(([input,img,name])=>{
-document.getElementById(input).addEventListener("change",e=>{
-const file=e.target.files[0];
-if(!file)return;
-if(!file.type.startsWith("image/")){
-alert("Pilih file gambar.");
-return;
-}
-const image=document.getElementById(img);
-image.src=URL.createObjectURL(file);
-image.style.display="block";
-updateStatus();
-});
+const BACKEND_URL =
+"https://script.google.com/macros/s/AKfycbw0VKDsy-Ozl4AcKENkPXsagvtTXrnLkBZvt1ZivCmt0HRK10fx6Agagu--ptNT5nMAFQ/exec";
+
+const HISTORY_KEY="gold_smc_history_v3";
+
+slots.forEach(([inputId,imageId,name])=>{
+ const input=document.getElementById(inputId);
+
+ input.addEventListener("change",event=>{
+  const file=event.target.files[0];
+  const image=document.getElementById(imageId);
+
+  if(!file){
+   image.removeAttribute("src");
+   image.style.display="none";
+   updateStatus();
+   return;
+  }
+
+  if(!file.type.startsWith("image/")){
+   alert("Pilih file gambar yang benar.");
+   input.value="";
+   image.style.display="none";
+   updateStatus();
+   return;
+  }
+
+  const oldUrl=image.dataset.objectUrl;
+  if(oldUrl) URL.revokeObjectURL(oldUrl);
+
+  const objectUrl=URL.createObjectURL(file);
+  image.src=objectUrl;
+  image.dataset.objectUrl=objectUrl;
+  image.style.display="block";
+
+  updateStatus();
+ });
 });
 
 function updateStatus(){
-const selected=slots.filter(s=>
-document.getElementById(s[0]).files.length
-).map(s=>s[2]);
-document.getElementById("uploadStatus").textContent=
-selected.length+" timeframe terupload: "+selected.join(", ");
+ const selected=slots.filter(slot=>
+  document.getElementById(slot[0]).files.length>0
+ ).map(slot=>slot[2]);
+
+ document.getElementById("uploadStatus").textContent=
+ selected.length===0
+ ? "Menunggu screenshot."
+ : selected.length+" dari 3 timeframe terupload: "+
+ selected.join(", ");
 }
 
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbw0VKDsy-Ozl4AcKENkPXsagvtTXrnLkBZvt1ZivCmt0HRK10fx6Agagu--ptNT5nMAFQ/exec";
+function getMissing(){
+ return slots.filter(slot=>
+  !document.getElementById(slot[0]).files.length
+ ).map(slot=>slot[2]);
+}
+
+function buildPrompt(){
+ const pair=document.getElementById("pair").value.trim();
+ const session=document.getElementById("session").value;
+
+ return `ANALISIS EDUKASI SMART MONEY CONCEPT
+
+PAIR: ${pair}
+SESI: ${session}
+TIMEFRAME: H1, M15, M5
+
+TUGAS:
+Amati ketiga screenshot chart yang dilampirkan.
+
+1. MARKET STRUCTURE
+Jelaskan struktur pasar yang terlihat.
+
+2. BOS DAN CHoCH
+Periksa apakah terdapat BOS atau CHoCH.
+Jelaskan bukti visualnya.
+
+3. LIQUIDITY
+Amati kemungkinan liquidity sweep.
+Jangan menyimpulkan jika tidak terlihat jelas.
+
+4. ORDER BLOCK
+Identifikasi area yang berpotensi menjadi Order Block.
+Jelaskan alasannya.
+
+5. FAIR VALUE GAP
+Periksa apakah terdapat Fair Value Gap.
+
+6. PREMIUM DAN DISCOUNT
+Jelaskan posisi harga berdasarkan range yang terlihat.
+
+7. MULTI TIMEFRAME
+Bandingkan H1, M15, dan M5.
+Jelaskan apakah ketiganya saling mendukung.
+
+FORMAT HASIL:
+- Ringkasan struktur H1
+- Pengamatan M15
+- Pengamatan M5
+- Konfirmasi antar-timeframe
+- Hal yang belum dapat dipastikan
+- Kesimpulan pembelajaran
+
+PENTING:
+Jangan mengarang harga atau data yang tidak terlihat.
+Jika gambar tidak jelas, katakan tidak dapat dipastikan.
+Ini hanya analisis edukasi dan simulasi, bukan rekomendasi
+transaksi atau instruksi untuk menggunakan uang sungguhan.`;
+}
 
 async function prepareAnalysis(){
-  const pair = document.getElementById("pair").value.trim();
-  const session = document.getElementById("session").value;
+ const pair=document.getElementById("pair").value.trim();
+ const session=document.getElementById("session").value;
+ const status=document.getElementById("analysisStatus");
+ const result=document.getElementById("result");
+ const button=document.getElementById("analyzeButton");
 
-  const missing = slots.filter(s =>
-    !document.getElementById(s[0]).files.length
-  ).map(s => s[2]);
+ if(!pair){
+  alert("Masukkan pair terlebih dahulu.");
+  return;
+ }
 
-  if(!pair){
-    alert("Masukkan pair.");
-    return;
+ if(!/^[A-Za-z0-9._-]{3,20}$/.test(pair)){
+  alert("Format pair tidak valid.");
+  return;
+ }
+
+ const missing=getMissing();
+
+ if(missing.length){
+  alert("Upload screenshot: "+missing.join(", "));
+  return;
+ }
+
+ document.getElementById("prompt").value=buildPrompt();
+
+ status.textContent="Menghubungkan ke backend...";
+ result.textContent="Menunggu respons backend...";
+ button.disabled=true;
+ button.textContent="MENGHUBUNGKAN...";
+
+ const payload={
+  pair:pair,
+  session:session,
+  timeframes:["H1","M15","M5"],
+  mode:"paper_analysis"
+ };
+
+ try{
+  const response=await fetch(BACKEND_URL,{
+   method:"POST",
+   headers:{
+    "Content-Type":"text/plain;charset=utf-8"
+   },
+   body:JSON.stringify(payload)
+  });
+
+  if(!response.ok){
+   throw new Error("HTTP "+response.status);
   }
 
-  if(missing.length){
-    alert("Upload screenshot: " + missing.join(", "));
-    return;
-  }
+  const data=await response.json();
 
-  const prompt = `Pengamatan edukasi SMC untuk ${pair}.
-Sesi: ${session}.
-Timeframe: H1, M15, M5.
-Periksa struktur pasar, BOS, CHoCH, liquidity,
-Order Block, Fair Value Gap, Premium dan Discount.
-Jangan mengarang data yang tidak terlihat.
-`;
+  status.textContent="Backend berhasil merespons.";
 
-  document.getElementById("prompt").value = prompt;
+  result.textContent=
+   "Status backend: "+(data.success?"Berhasil":"Diterima")+
+   "\nStatus analisis: "+(data.analysis_status||"Menunggu AI")+
+   "\nStatus AI: "+(data.ai_status||"Belum dikonfigurasi")+
+   "\n\nBackend telah menerima metadata pengujian."+
+   "\nScreenshot belum dianalisis secara otomatis."+
+   "\nGunakan instruksi yang telah dibuat bersama gambar di ChatGPT.";
 
-  const status = document.getElementById("analysisStatus");
-  const result = document.getElementById("result");
+ }catch(error){
+  status.textContent="Koneksi backend belum berhasil.";
 
-  status.textContent = "Menghubungkan ke backend...";
-  result.textContent = "Menunggu respons backend...";
-
-  const payload = {
-    pair: pair,
-    session: session,
-    timeframes: ["H1", "M15", "M5"],
-    mode: "paper_analysis"
-  };
-
-  try {
-    const response = await fetch(BACKEND_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-
-    status.textContent = "Backend berhasil merespons.";
-
-    result.textContent =
-      "Status: " + (data.analysis_status || "Diterima") +
-      "\nAI: " + (data.ai_status || "Belum dikonfigurasi") +
-      "\n\nBackend sudah menerima data pengujian. " +
-      "Analisis visual AI belum aktif.";
-  } catch(error) {
-    status.textContent = "Koneksi belum berhasil.";
-    result.textContent =
-      "Periksa URL backend dan izin akses Web App. " +
-      "Jika muncul kesalahan CORS, koneksi browser perlu penyesuaian.";
-  }
+  result.textContent=
+   "Backend belum dapat dihubungi.\n"+
+   "Periksa URL Web App dan pengaturan aksesnya.\n"+
+   "Detail: "+error.message;
+ }finally{
+  button.disabled=false;
+  button.textContent="SIAPKAN ANALISIS";
+ }
 }
 
 async function copyPrompt(){
-const text=document.getElementById("prompt").value;
-if(!text){alert("Siapkan analisis dahulu.");return;}
-try{
-await navigator.clipboard.writeText(text);
-alert("Instruksi berhasil disalin.");
-}catch(e){
-document.getElementById("prompt").select();
-alert("Silakan salin teks yang dipilih.");
+ const text=document.getElementById("prompt").value;
+
+ if(!text){
+  alert("Siapkan instruksi analisis dahulu.");
+  return;
+ }
+
+ try{
+  await navigator.clipboard.writeText(text);
+  alert("Instruksi berhasil disalin.");
+ }catch(error){
+  const area=document.getElementById("prompt");
+  area.focus();
+  area.select();
+  alert("Pilih dan salin teks instruksi.");
+ }
 }
+
+function getHistory(){
+ try{
+  const data=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");
+  return Array.isArray(data)?data:[];
+ }catch(error){
+  return [];
+ }
 }
 
 function saveNotes(){
-const text=document.getElementById("notes").value.trim();
-if(!text){alert("Isi catatan dahulu.");return;}
-try{
-localStorage.setItem("smc_notes",text);
-document.getElementById("saved").textContent=
-"Catatan tersimpan di browser ini.";
-}catch(e){alert("Penyimpanan tidak tersedia.");}
+ const text=document.getElementById("notes").value.trim();
+ const pair=document.getElementById("pair").value.trim();
+ const session=document.getElementById("session").value;
+ const saved=document.getElementById("saved");
+
+ if(!text){
+  alert("Isi catatan pengamatan dahulu.");
+  return;
+ }
+
+ const history=getHistory();
+
+ history.unshift({
+  id:Date.now(),
+  pair:pair,
+  session:session,
+  notes:text,
+  date:new Date().toLocaleString("id-ID")
+ });
+
+ try{
+  localStorage.setItem(HISTORY_KEY,JSON.stringify(history));
+  saved.textContent="Pengamatan berhasil disimpan.";
+  document.getElementById("notes").value="";
+  showHistory();
+ }catch(error){
+  saved.textContent="Penyimpanan gagal. Ruang browser mungkin penuh.";
+ }
 }
+
+function showHistory(){
+ const container=document.getElementById("historyList");
+ const history=getHistory();
+
+ if(history.length===0){
+  container.textContent="Belum ada riwayat pengamatan.";
+  return;
+ }
+
+ container.innerHTML="";
+
+ history.forEach(item=>{
+  const entry=document.createElement("div");
+  entry.className="history-item";
+
+  const date=document.createElement("div");
+  date.className="history-date";
+  date.textContent=item.date||"Tanggal tidak diketahui";
+
+  const title=document.createElement("strong");
+  title.textContent=(item.pair||"Pair")+
+   " • "+(item.session||"Sesi tidak diketahui");
+
+  const note=document.createElement("p");
+  note.textContent=item.notes||"";
+
+  entry.appendChild(date);
+  entry.appendChild(title);
+  entry.appendChild(note);
+
+  container.appendChild(entry);
+ });
+}
+
+function clearHistory(){
+ const history=getHistory();
+
+ if(history.length===0){
+  alert("Belum ada riwayat untuk dihapus.");
+  return;
+ }
+
+ if(!confirm("Yakin ingin menghapus seluruh riwayat?")){
+  return;
+ }
+
+ localStorage.removeItem(HISTORY_KEY);
+ showHistory();
+
+ document.getElementById("saved").textContent=
+  "Seluruh riwayat berhasil dihapus dari browser.";
+}
+
+showHistory();
+updateStatus();
 </script>
+
 </body>
-  </html>
-  
+</html>
